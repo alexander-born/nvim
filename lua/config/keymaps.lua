@@ -57,7 +57,7 @@ map("n", "<leader>fn", function() builtin.find_files({ prompt_title = ".config/n
 map("n", "<leader>gr.", function() builtin.live_grep({ cwd = "$HOME/.cfg", vimgrep_arguments = { "rg", "--color=never", "--no-heading", "--with-filename", "--line-number", "--column", "--smart-case", "--hidden", }, file_ignore_patterns = { ".git" }, }) end, { desc = "Grep .cfg" })
 map("n", "<leader>grw", function() builtin.live_grep({ cwd = "$HOME/projects/vimwiki" }) end, { desc = "Grep Wiki" })
 map("n", "<leader>grn", function() builtin.live_grep({ search_dirs = { "$HOME/.config/nvim", "$HOME/.local/share/nvim/lazy" } }) end, { desc = "Grep Neovim Files" })
-map("n", "<leader>f.", function() builtin.find_files({ prompt_title = ".cfg", cwd = "$HOME/.config/nvim", hidden = true, file_ignore_patterns = { ".git" }, }) end, { desc = "Find .cfg" })
+map("n", "<leader>f.", function() builtin.find_files({ prompt_title = ".cfg", cwd = "$HOME/.config/nvim", no_ignore=true, hidden = true, file_ignore_patterns = { ".git" }, }) end, { desc = "Find .cfg" })
 
 -- debugger
 local dap = require("dap")
