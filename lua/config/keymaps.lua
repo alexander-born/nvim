@@ -4,6 +4,20 @@
 -- stylua: ignore start
 local map = vim.keymap.set
 
+local wk = require("which-key")
+wk.register({
+    ["<leader>f"]  = { name = "+find"},
+    ["<leader>t"]  = { name = "+test"},
+    ["<leader>gr"] = { name = "+grep"},
+    ["<leader>b"]  = { name = "+bazel"},
+    ["<leader>bd"] = { name = "+debug"},
+    ["<leader>d"]  = { name = "+debug"},
+    ["<leader>w"]  = { name = "+wiki"},
+    ["<leader>x"]  = { name = "+trouble"},
+    ["<leader>g"]  = { name = "+git"},
+    ["<leader>s"]  = { name = "+search +swap (TS)"},
+})
+
 local sub = require("substitute")
 map("n", "<leader>r", sub.operator, { desc = "Replace with Register" })
 map("n", "<leader>rr", sub.line, { desc = "Replace Line with Register" })
@@ -11,7 +25,7 @@ map("n", "<leader>R", sub.eol, { desc = "Replace EOL with Register" })
 map("x", "r", sub.visual, { desc = "Replace with Register" })
 
 map("n", "<leader>sa", "<cmd>TSTextobjectSwapNext<CR>", { desc = "Swap Arguments" })
-map("n", "<leader>sa", "<cmd>TSTextobjectSwapPrevious<CR>", { desc = "Swap Arguments Previous" })
+map("n", "<leader>sA", "<cmd>TSTextobjectSwapPrevious<CR>", { desc = "Swap Arguments Previous" })
 
 -- bazel
 local bazel = require("bazel")
@@ -28,9 +42,9 @@ map("n", "<Leader>br", function() bazel.run_here("run", vim.g.bazel_config) end,
 map("n", "<Leader>bdb", function() bazel.run_here("build", vim.g.bazel_config .. " --compilation_mode dbg --copt=-O0") end, { desc = "Bazel Debug Build" })
 
 -- multi cursor <M-...> = <Alt-...>
-vim.g.VM_maps = {
-  ["Add Cursor Down"] = "<C-J>",
-  ["Add Cursor Up"] = "<C-K>",
+vim.g.VM_maps = { -- FIXME: doesn't work Alt-J/K moves lines in lazy vim
+  ["Add Cursor Down"] = "<M-J>",
+  ["Add Cursor Up"] = "<M-K>",
   ["Find Subword Under"] = "<C-n>",
   ["Find Under"] = "<C-n>",
 }
@@ -116,13 +130,8 @@ map("n", "<C-K>", tmux.move_top, { desc = "Window <up>" })
 map("n", "<C-L>", tmux.move_right, { desc = "Window <right>" })
 map("n", "<C-H>", tmux.move_left, { desc = "Window <left>" })
 
-map("v", "J", [[:m '>+1<CR>gv=gv]], { desc = "Move selected lines down" })
-map("v", "K", [[:m '<-2<CR>gv=gv]], { desc = "Move selected lines up" })
-
 map("n", "<Leader>f", ':let @+=expand("%")<CR>', { desc = "Copy full path to clipboard" })
-map("v", "<C-c>", '"+y', { desc = "CTRL-c copies selection" })
-
-map("v", "p", '"_dP', { desc = "p in visual mode pastes without changing default register" })
+map("v", "<C-c>", '"+y', { desc = "CTRL-c copies selection" }) -- FIXME: doesn't work
 
 -- beginning/end of line
 map({ "n", "v" }, "H", "^", { desc = "Beginning of Line" })
@@ -136,5 +145,8 @@ map("n", "<leader>tl", neotest.run.run_last, { desc = "Test Last" })
 map("n", "<leader>tf", function() neotest.run.run(vim.fn.expand("%")) end, { desc = "Test File" })
 map("n", "<leader>tdt", function() neotest.run.run({ strategy = "dap" }) end, { desc = "Test Debug Nearest Test" })
 map("n", "<leader>tdf", function() neotest.run.run({ vim.fn.expand("%"), strategy = "dap" }) end, { desc = "Test Debug File" })
+
+-- wiki
+map("n", "<leader>ww", ":VimwikiIndex<CR>", { desc = "Open Wiki Index" })
 
 -- stylua: ignore end
