@@ -1,5 +1,17 @@
-local bazel_root_dir = require("config.bazel").root_dir
 local path = require("lspconfig/util").path
+
+local function bazel_root_dir(default_root_dir)
+  return function(fname)
+    local bazel = require("bazel")
+    if bazel.is_bazel_cache(fname) then
+      return bazel.get_workspace_from_cache(fname)
+    elseif bazel.is_bazel_workspace(fname) then
+      return bazel.get_workspace(fname)
+    end
+
+    return default_root_dir(fname)
+  end
+end
 
 local function get_python_path(workspace)
   -- Use activated virtualenv.
@@ -25,6 +37,7 @@ end
 return {
   {
     "neovim/nvim-lspconfig",
+    dependencies = { "alexander-born/bazel-vim" },
     ---@class PluginLspOpts
     opts = {
       ---@type lspconfig.options

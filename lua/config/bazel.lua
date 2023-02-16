@@ -170,16 +170,4 @@ function M.DebugRun()
   end
 end
 
-function M.root_dir(default_root_dir)
-  return function(fname)
-    if bazel.is_bazel_cache(fname) then
-      return bazel.get_workspace_from_cache(fname)
-    elseif bazel.is_bazel_workspace(fname) then
-      return bazel.get_workspace(fname)
-    end
-
-    return default_root_dir(fname)
-  end
-end
-
 return M
