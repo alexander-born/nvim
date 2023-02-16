@@ -23,6 +23,7 @@ return {
         end,
       },
     },
+    keys = { { "<leader>sa", false } },
     opts = {
       extensions = {
         project = {
