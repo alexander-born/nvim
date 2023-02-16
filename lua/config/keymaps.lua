@@ -26,8 +26,8 @@ map("n", "<Leader>bdb", function() bazel.run_here("build", vim.g.bazel_config ..
 
 -- multi cursor <M-...> = <Alt-...>
 vim.g.VM_maps = {
-  ["Add Cursor Down"] = "<C-j>",
-  ["Add Cursor Up"] = "<C-k>",
+  ["Add Cursor Down"] = "<C-J>",
+  ["Add Cursor Up"] = "<C-K>",
   ["Find Subword Under"] = "<C-n>",
   ["Find Under"] = "<C-n>",
 }

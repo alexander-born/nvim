@@ -23,33 +23,35 @@ local function get_python_path(workspace)
 end
 
 return {
-  "neovim/nvim-lspconfig",
-  ---@class PluginLspOpts
-  opts = {
-    ---@type lspconfig.options
-    servers = {
-      -- will be automatically installed with mason and loaded with lspconfig
-      clangd = {},
-      pyright = {},
-    },
-    -- you can do any additional lsp server setup here
-    -- return true if you don't want this server to be setup with lspconfig
-    ---@type table<string, fun(server:string, opts:_.lspconfig.options):boolean?>
-    setup = {
-      clangd = function(_, opts)
-        opts.capabilities.documentFormattingProvider = false
-        opts.capabilities.offsetEncoding = { "utf-16" }
-        opts.cmd = { "clangd", "--background-index", "--header-insertion=never", "--offset-encoding=utf-16" }
-        opts.root_dir = bazel_root_dir(require("lspconfig.server_configurations.clangd").default_config.root_dir)
-      end,
-      pyright = function(_, opts)
-        opts.on_init = function(client)
-          client.config.settings.python.pythonPath = get_python_path(client.config.root_dir)
-        end
-        opts.root_dir = bazel_root_dir(require("lspconfig.server_configurations.pyright").default_config.root_dir)
-      end,
-      -- Specify * to use this function as a fallback for any server
-      -- ["*"] = function(server, opts) end,
+  {
+    "neovim/nvim-lspconfig",
+    ---@class PluginLspOpts
+    opts = {
+      ---@type lspconfig.options
+      servers = {
+        -- will be automatically installed with mason and loaded with lspconfig
+        clangd = {},
+        pyright = {},
+      },
+      -- you can do any additional lsp server setup here
+      -- return true if you don't want this server to be setup with lspconfig
+      ---@type table<string, fun(server:string, opts:_.lspconfig.options):boolean?>
+      setup = {
+        clangd = function(_, opts)
+          opts.capabilities.documentFormattingProvider = false
+          opts.capabilities.offsetEncoding = { "utf-16" }
+          opts.cmd = { "clangd", "--background-index", "--header-insertion=never" }
+          opts.root_dir = bazel_root_dir(require("lspconfig.server_configurations.clangd").default_config.root_dir)
+        end,
+        pyright = function(_, opts)
+          opts.on_init = function(client)
+            client.config.settings.python.pythonPath = get_python_path(client.config.root_dir)
+          end
+          opts.root_dir = bazel_root_dir(require("lspconfig.server_configurations.pyright").default_config.root_dir)
+        end,
+        -- Specify * to use this function as a fallback for any server
+        -- ["*"] = function(server, opts) end,
+      },
     },
   },
   {
