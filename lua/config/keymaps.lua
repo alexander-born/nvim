@@ -34,7 +34,7 @@ vim.g.VM_maps = {
 
 -- telescope
 local telescope = require("telescope")
-local project = require("config.project")
+--local project = require("config.project")
 local builtin = require("telescope.builtin")
 map("n", "<leader>ff", function() builtin.find_files({ previewer = false }) end, { desc = "Find Files" })
 map("n", "<leader>fs", function() builtin.find_files({ previewer = false, search_file = vim.fn.expand("<cword>") }) end, { desc = "Find Files String (Current Word under Cursor)" })
@@ -51,7 +51,7 @@ map("n", "<leader>gr", builtin.live_grep, { desc = "Grep" })
 map("n", "<leader>grs", builtin.grep_string, { desc = "Grep String (Current Word under Cursor)" })
 map("n", "<leader>grb", builtin.current_buffer_fuzzy_find, { desc = "Fuzzy Find Buffer" })
 map("n", "<leader>fy", telescope.extensions.neoclip.default, { desc = "Find Yanks" })
-map("n", "<leader>fp", project.find, { desc = "Find Project" })
+--map("n", "<leader>fp", project.find, { desc = "Find Project" })
 map("n", "<leader>f/", function() builtin.find_files({ prompt_title = ".cfg", cwd = "$HOME/.cfg", hidden = true, file_ignore_patterns = { ".git" } }) end, { desc = "Find .cfg" })
 map("n", "<leader>fn", function() builtin.find_files({ prompt_title = ".config/nvim", path_display = { "smart" }, search_dirs = { "$HOME/.config/nvim", "$HOME/.local/share/nvim/lazy" }, }) end, { desc = "Find Neovim Files" })
 map("n", "<leader>gr.", function() builtin.live_grep({ cwd = "$HOME/.cfg", vimgrep_arguments = { "rg", "--color=never", "--no-heading", "--with-filename", "--line-number", "--column", "--smart-case", "--hidden", }, file_ignore_patterns = { ".git" }, }) end, { desc = "Grep .cfg" })
