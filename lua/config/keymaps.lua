@@ -10,6 +10,9 @@ map("n", "<leader>rr", sub.line, { desc = "Replace Line with Register" })
 map("n", "<leader>R", sub.eol, { desc = "Replace EOL with Register" })
 map("x", "r", sub.visual, { desc = "Replace with Register" })
 
+map("n", "<leader>sa", "<cmd>TSTextobjectSwapNext<CR>", { desc = "Swap Arguments" })
+map("n", "<leader>sa", "<cmd>TSTextobjectSwapPrevious<CR>", { desc = "Swap Arguments Previous" })
+
 -- bazel
 local bazel = require("bazel")
 local my_bazel = require("config.bazel")

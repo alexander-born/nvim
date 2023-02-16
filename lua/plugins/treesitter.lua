@@ -1,6 +1,6 @@
 return {
   "nvim-treesitter/nvim-treesitter",
-  dependencies = { "nvim-treesitter/nvim-treesitter-textobjects" },
+  dependencies = { "nvim-treesitter/nvim-treesitter-textobjects", init = function() end },
   ---@type TSConfig
   opts = {
     ensure_installed = {
