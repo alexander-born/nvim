@@ -20,4 +20,11 @@ return {
       telescope.load_extension("dap")
     end,
   },
+  {
+    "williamboman/mason.nvim",
+    opts = function(_, opts)
+      table.insert(opts.ensure_installed, "cpptools")
+      table.insert(opts.ensure_installed, "debugpy")
+    end,
+  },
 }

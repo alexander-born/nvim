@@ -44,4 +44,13 @@ return {
       }
     end,
   },
+  {
+    "williamboman/mason.nvim",
+    opts = function(_, opts)
+      table.insert(opts.ensure_installed, "stylua")
+      table.insert(opts.ensure_installed, "buildifier")
+      table.insert(opts.ensure_installed, "clangd")
+      table.insert(opts.ensure_installed, "black")
+    end,
+  },
 }
