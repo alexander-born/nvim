@@ -10,7 +10,12 @@ return {
   {
     "vimwiki/vimwiki",
     config = function()
-      require("config.vimwiki").setup()
+      vim.g.vimwiki_list =
+        { {
+          ext = ".md",
+          path = "~/projects/vimwiki/",
+          syntax = "markdown",
+        } }
     end,
   },
   { "davidgranstrom/nvim-markdown-preview" },
