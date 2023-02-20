@@ -131,7 +131,7 @@ map("n", "<C-L>", tmux.move_right, { desc = "Window <right>" })
 map("n", "<C-H>", tmux.move_left, { desc = "Window <left>" })
 
 map("n", "<Leader>f", ':let @+=expand("%")<CR>', { desc = "Copy full path to clipboard" })
-map("v", "<C-c>", '"+y', { desc = "CTRL-c copies selection" }) -- FIXME: doesn't work
+map("v", "<C-c>", '"+y', { desc = "CTRL-c copies selection" })
 
 -- beginning/end of line
 map({ "n", "v" }, "H", "^", { desc = "Beginning of Line" })
