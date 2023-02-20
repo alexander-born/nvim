@@ -1,43 +1,14 @@
 return {
   "nvim-treesitter/nvim-treesitter",
   dependencies = { "nvim-treesitter/nvim-treesitter-textobjects", init = function() end },
-  ---@type TSConfig
-  opts = {
-    ensure_installed = {
-      "bash",
-      "help",
-      "html",
-      "javascript",
-      "json",
-      "lua",
-      "markdown",
-      "markdown_inline",
-      "python",
-      "cpp",
-      "query",
-      "regex",
-      "tsx",
-      "typescript",
-      "vim",
-      "yaml",
-    },
-    textobjects = {
-      select = {
-        enable = true,
-        keymaps = {
-          ["aa"] = "@parameter.outer",
-          ["ia"] = "@parameter.inner",
-          ["af"] = "@function.outer",
-          ["if"] = "@function.inner",
-          ["ac"] = "@class.outer",
-          ["ic"] = "@class.inner",
-        },
-      },
+  opts = function(_, opts)
+    table.insert(opts.ensure_installed, "cpp")
+    opts.textobjects = {
       swap = {
         enable = true,
         swap_next = { ["<leader>sa"] = "@parameter.inner" },
         swap_previous = { ["<leader>sA"] = "@parameter.inner" },
       },
-    },
-  },
+    }
+  end,
 }
