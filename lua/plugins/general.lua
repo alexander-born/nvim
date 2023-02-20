@@ -1,4 +1,5 @@
 return {
+  { "folke/lazy.nvim", opts = { checker = { notify = false } } },
   {
     "gbprod/substitute.nvim",
     config = function()
