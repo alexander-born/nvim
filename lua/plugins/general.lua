@@ -25,4 +25,11 @@ return {
       return require("tmux").setup({ copy_sync = { enable = false } })
     end,
   },
+  {
+    "numToStr/Comment.nvim",
+    config = function()
+      require("Comment").setup()
+    end,
+  },
+  { "machakann/vim-sandwich" },
 }
