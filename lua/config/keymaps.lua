@@ -56,10 +56,14 @@ local builtin = require("telescope.builtin")
 local function on_project_selected(prompt_bufnr)
   local project_actions = require( "telescope._extensions.project.actions")
   local user_actions_available, user_project_actions = pcall(require, "user.project.actions")
+  local work_actions_available, work_project_actions = pcall(require, "work.project.actions")
   project_actions.change_working_directory(prompt_bufnr, false)
   vim.g.project_path = vim.fn.getcwd()
   if user_actions_available then
     user_project_actions(prompt_bufnr)
+  end
+  if work_actions_available then
+    work_project_actions(prompt_bufnr)
   end
 end
 
