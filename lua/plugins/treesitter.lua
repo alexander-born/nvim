@@ -1,6 +1,5 @@
 return {
   "nvim-treesitter/nvim-treesitter",
-  dependencies = { "nvim-treesitter/nvim-treesitter-textobjects", init = function() end },
   opts = function(_, opts)
     table.insert(opts.ensure_installed, "cpp")
     opts.textobjects = {
