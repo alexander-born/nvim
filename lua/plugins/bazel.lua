@@ -1,6 +1,5 @@
 return {
-  -- { "google/vim-maktaba" },
-  -- { "bazelbuild/vim-bazel" },
+  { "bazelbuild/vim-bazel", dependencies = { "google/vim-maktaba" } },
   {
     "alexander-born/bazel-vim",
     config = function()
