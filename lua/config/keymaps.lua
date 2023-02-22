@@ -42,12 +42,8 @@ map("n", "<Leader>br", function() bazel.run_here("run", vim.g.bazel_config) end,
 map("n", "<Leader>bdb", function() bazel.run_here("build", vim.g.bazel_config .. " --compilation_mode dbg --copt=-O0") end, { desc = "Bazel Debug Build" })
 
 -- multi cursor <M-...> = <Alt-...>
-vim.g.VM_maps = { -- FIXME: doesn't work Alt-J/K moves lines in lazy vim
-  ["Add Cursor Down"] = "<M-J>",
-  ["Add Cursor Up"] = "<M-K>",
-  ["Find Subword Under"] = "<C-n>",
-  ["Find Under"] = "<C-n>",
-}
+map("n", "<M-j>", "<Plug>(VM-Add-Cursor-Down)", { desc = "Multi Cursor Down" })
+map("n", "<M-k>", "<Plug>(VM-Add-Cursor-Up)", { desc = "Multi Cursor Up" })
 
 -- telescope
 local telescope = require("telescope")
