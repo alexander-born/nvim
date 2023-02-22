@@ -29,3 +29,5 @@ vim.api.nvim_create_autocmd({ "TermOpen" }, {
     vim.keymap.set("n", "<Leader>e", vim.fn.OpenErrorInQuickfix, { desc = "Errors to Quickfix", buffer = true })
   end,
 })
+
+vim.cmd([[command! SetupPyrightWithBazelForThisTarget execute "lua require'config.bazel'.setup_pyright_with_bazel_for_this_target()"]])
