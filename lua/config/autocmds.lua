@@ -30,4 +30,14 @@ vim.api.nvim_create_autocmd({ "TermOpen" }, {
   end,
 })
 
-vim.cmd([[command! SetupPyrightWithBazelForThisTarget execute "lua require'config.bazel'.setup_pyright_with_bazel_for_this_target()"]])
+vim.cmd(
+  [[command! SetupPyrightWithBazelForThisTarget execute "lua require'config.bazel'.setup_pyright_with_bazel_for_this_target()"]]
+)
+
+function UpdateConfig()
+  vim.cmd("!git -C ~/.config/nvim pull")
+  vim.cmd("!git -C ~/.config/nvim/lua/work pull")
+  vim.cmd("Lazy restore")
+end
+
+vim.cmd([[command! UpdateConfig lua UpdateConfig()]])
