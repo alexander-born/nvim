@@ -4,7 +4,12 @@ return {
     opts = {
       filesystem = {
         window = {
-          mappings = { ["o"] = "open", ["<leader>f"] = "telescope_find", ["<leader>s"] = "telescope_grep" },
+          mappings = {
+            ["o"] = "open",
+            ["<leader>f"] = "telescope_find",
+            ["<leader>s"] = "telescope_grep",
+            ["/"] = false,
+          },
         },
         commands = {
           telescope_find = function(state)

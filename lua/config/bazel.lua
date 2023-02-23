@@ -96,7 +96,6 @@ function M.create_pyright_config(target, include)
     },
     on_exit = function(job)
       local depsets = job:result()
-      -- vim.pretty_print(depsets)
       local extra_paths = {}
       for _, depset in pairs(depsets) do
         for extra_path in depset:gmatch('"(.-)"') do
