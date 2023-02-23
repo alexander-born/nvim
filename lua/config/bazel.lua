@@ -2,6 +2,19 @@ local bazel = require("bazel")
 
 local M = {}
 
+local function BufDir()
+  local bufnr = vim.fn.bufnr()
+  return vim.fn.expand(("#%d:p:h"):format(bufnr))
+end
+
+local function Split(s, delimiter)
+  local result = {}
+  for match in (s .. delimiter):gmatch("(.-)" .. delimiter) do
+    table.insert(result, match)
+  end
+  return result
+end
+
 local function StartDebugger(type, program, args, cwd, env, workspace)
   require("dap").run({
     name = "Launch",
@@ -79,48 +92,35 @@ local function get_keys(t)
 end
 
 function M.create_pyright_config(target, include)
-  local workspace = bazel.get_workspace()
-  local ws_name = bazel.get_workspace_name(workspace)
-  local Path = require("plenary.path")
-  local Job = require("plenary.job")
-  Job:new({
-    command = "bazel",
-    args = {
-      "cquery",
-      vim.g.bazel_config,
-      "kind(py_.*," .. target .. ")",
-      "--output",
-      "starlark",
-      "--starlark:expr",
-      'providers(target)["PyInfo"].imports',
-    },
-    on_exit = function(job)
-      local depsets = job:result()
-      local extra_paths = {}
-      for _, depset in pairs(depsets) do
-        for extra_path in depset:gmatch('"(.-)"') do
-          if extra_path:match("^" .. ws_name) then
-            for _, pattern in pairs({ workspace, workspace .. "/bazel-bin" }) do
-              local path = extra_path:gsub("^" .. ws_name, pattern)
-              if Path:new(path):is_dir() then
-                extra_paths[path] = true
-              end
+  local on_success = function(bazel_info)
+    local Path = require("plenary.path")
+    local extra_paths = {}
+    local ws_name = bazel_info.workspace_name
+    local workspace = bazel_info.workspace
+    for _, line in pairs(bazel_info.stdout) do
+      local depset = line:match("depset%(%[(.*)%]") or ""
+      for extra_path in depset:gmatch('"(.-)"') do
+        if extra_path:match("^" .. ws_name) then
+          for _, pattern in pairs({ workspace, workspace .. "/bazel-bin" }) do
+            local path = extra_path:gsub("^" .. ws_name, pattern)
+            if Path:new(path):is_dir() then
+              extra_paths[path] = true
             end
-          else
-            extra_paths[workspace .. "/external/" .. extra_path] = true
           end
+        else
+          extra_paths[workspace .. "/external/" .. extra_path] = true
         end
       end
-      vim.schedule(function()
-        save_pyright_config_json(get_keys(extra_paths), include)
-      end)
-    end,
-  }):start()
-end
-
-function M.setup_pyright_with_bazel_for_this_target()
-  vim.fn.BazelGetCurrentBufTarget()
-  M.add_python_deps_to_pyright(vim.g.current_bazel_target)
+    end
+    save_pyright_config_json(get_keys(extra_paths), include)
+  end
+  bazel.cquery(
+    vim.g.bazel_config
+      .. " 'kind(py_.*,"
+      .. target
+      .. ")' --output starlark --starlark:expr 'providers(target)[\"PyInfo\"].imports'",
+    { on_success = on_success }
+  )
 end
 
 function M.DebugBazel(type, bazel_config, get_program, args, get_env)
