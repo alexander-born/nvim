@@ -81,6 +81,7 @@ local function save_pyright_config_json(extra_paths, include)
   local config = { typeCheckingMode = "off", extraPaths = extra_paths, include = include }
   local json = { vim.fn.json_encode(config) }
   vim.fn.writefile(json, "pyrightconfig.json")
+  print("Created pyrightconfig.json")
 end
 
 local function get_keys(t)
