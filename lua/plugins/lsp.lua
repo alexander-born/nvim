@@ -37,7 +37,7 @@ end
 return {
   {
     "neovim/nvim-lspconfig",
-    dependencies = { "alexander-born/bazel-vim" },
+    dependencies = { "alexander-born/bazel.nvim" },
     ---@class PluginLspOpts
     opts = {
       ---@type lspconfig.options

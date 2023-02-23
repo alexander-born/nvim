@@ -1,7 +1,7 @@
 return {
   { "bazelbuild/vim-bazel", dependencies = { "google/vim-maktaba" } },
   {
-    "alexander-born/bazel-vim",
+    "alexander-born/bazel.nvim",
     config = function()
       -- Info: to make tab completion work copy '/etc/bash_completion.d/bazel-complete.bash' to '/etc/bash_completion.d/bazel'
 
