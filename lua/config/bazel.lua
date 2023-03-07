@@ -40,24 +40,23 @@ function M.YankLabel()
   vim.fn.setreg('"', label)
 end
 
-local function get_python_imports(program)
-  local command = "grep 'python_imports =' " .. program .. [[ | sed "s|.*'\(.*\)'|\1|"]]
+local function get_python_imports(bazel_info)
+  local command = "grep 'python_imports =' " .. bazel_info.executable .. [[ | sed "s|.*'\(.*\)'|\1|"]]
   return vim.fn.trim(vim.fn.system(command))
 end
 
-local function get_python_test_executable(bazel_info)
+local function get_python_executable(bazel_info)
   local command = [[grep -oP "rel_path = '.*'" ]]
     .. bazel_info.executable
     .. [[ | grep -o "'.*'" | tail -c +2 | head -c -2]]
   return bazel_info.runfiles .. "/" .. vim.fn.trim(vim.fn.system(command))
 end
 
-local function get_bazel_python_modules(program)
-  local runfiles = program .. ".runfiles"
-  local extra_paths = { runfiles, BufDir(), runfiles .. "/" .. bazel.get_workspace_name() }
-  local imports = Split(get_python_imports(program), ":")
+local function get_bazel_python_modules(bazel_info)
+  local imports = Split(get_python_imports(bazel_info), ":")
+  local extra_paths = { bazel_info.runfiles }
   for _, import in pairs(imports) do
-    table.insert(extra_paths, runfiles .. "/" .. import)
+    table.insert(extra_paths, bazel_info.runfiles .. "/" .. import)
   end
   return extra_paths
 end
@@ -72,8 +71,8 @@ local function construct_python_path(extra_paths)
   return env
 end
 
-local function get_python_path(program)
-  local extra_paths = get_bazel_python_modules(program)
+local function get_python_path(bazel_info)
+  local extra_paths = get_bazel_python_modules(bazel_info)
   return construct_python_path(extra_paths)
 end
 
@@ -132,24 +131,22 @@ function M.DebugBazel(type, bazel_config, get_program, args, get_env)
   bazel.run_here("build", bazel_config, { on_success = start_debugger })
 end
 
-function M.DebugBazelPy(get_program)
-  local args = vim.g.debug_args or { "" }
+function M.DebugBazelPy(args)
   local get_env = function(bazel_info)
-    return { PYTHONPATH = get_python_path(bazel_info.executable), RUNFILES_DIR = bazel_info.runfiles }
+    return {
+      PYTHONPATH = get_python_path(bazel_info),
+      RUNFILES_DIR = bazel_info.runfiles,
+    }
   end
-  M.DebugBazel("python", vim.g.bazel_config, get_program, args, get_env)
+  M.DebugBazel("python", vim.g.bazel_config, get_python_executable, args, get_env)
 end
 
-function M.DebugPythonBinary()
-  M.DebugBazelPy(function(_)
-    return "${file}"
-  end)
+function M.DebugBazelPyRun()
+  M.DebugBazelPy(vim.g.debug_args or {})
 end
 
-function M.DebugPytest()
-  M.DebugBazelPy(function(bazel_info)
-    return get_python_test_executable(bazel_info)
-  end)
+function M.DebugBazelPyTest()
+  M.DebugBazelPy({ require("bazel.pytest").get_test_filter() })
 end
 
 local function default_program(bazel_info)
@@ -167,7 +164,7 @@ end
 
 function M.DebugTest()
   if vim.bo.filetype == "python" then
-    M.DebugPytest()
+    M.DebugBazelPyTest()
   elseif vim.bo.filetype == "cpp" then
     M.DebugGTest()
   else
@@ -177,7 +174,7 @@ end
 
 function M.DebugRun()
   if vim.bo.filetype == "python" then
-    M.DebugPythonBinary()
+    M.DebugBazelPyRun()
   else
     local args = vim.g.debug_args or {}
     M.DebugBazel(
