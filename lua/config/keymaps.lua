@@ -30,7 +30,7 @@ map("n", "<leader>sA", "<cmd>TSTextobjectSwapPrevious<CR>", { desc = "Swap Argum
 -- bazel
 local bazel = require("bazel")
 local my_bazel = require("config.bazel")
-vim.api.nvim_create_autocmd("FileType", { pattern = "bzl", callback = function() map("n", "gd", vim.fn.GoToBazelDefinition, { buffer = 0, desc = "Goto Definition" }) end, })
+vim.api.nvim_create_autocmd("FileType", { pattern = "bzl", callback = function() map("n", "gd", vim.fn.GoToBazelDefinition, { buffer = true, desc = "Goto Definition" }) end, })
 vim.api.nvim_create_autocmd("FileType", { pattern = "bzl", callback = function() map("n", "<Leader>y", my_bazel.YankLabel, { desc = "Bazel Yank Label" }) end, })
 map("n", "gbt", vim.fn.GoToBazelTarget, { desc = "Goto Bazel Build File" })
 map("n", "<Leader>bl", bazel.run_last, { desc = "Bazel Last" })
