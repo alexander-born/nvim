@@ -146,7 +146,7 @@ function M.DebugBazelPyRun()
 end
 
 function M.DebugBazelPyTest()
-  M.DebugBazelPy({ require("bazel.pytest").get_test_filter() })
+  M.DebugBazelPy(require("bazel.pytest").get_test_filter_args())
 end
 
 local function default_program(bazel_info)
