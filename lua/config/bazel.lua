@@ -158,7 +158,7 @@ local function default_env(_)
 end
 
 function M.DebugGTest()
-  local args = { "--gtest_filter=" .. require("bazel.gtest").get_gtest_filter() }
+  local args = require("bazel.gtest").get_gtest_filter_args()
   M.DebugBazel("cppdbg", vim.g.bazel_config .. " --compilation_mode dbg --copt -O0", default_program, args, default_env)
 end
 
