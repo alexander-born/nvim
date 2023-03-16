@@ -121,6 +121,8 @@ map("n", "<leader>gc", function() builtin.git_bcommits({ cwd = vim.fn.expand("%:
 map("n", "<Leader>gl", ":G log -n 1000<CR>", { desc = "Git Log" })
 map("n", "<Leader>gd", ":GitDiff<CR>", { desc = "Git Diff" })
 map("n", "<Leader>gs", ":G<CR>", { desc = "Git Status" })
+map("n", "<Leader>gp", ":G push<CR>", { desc = "Git Push" })
+map("n", "<Leader>gP", ":G push --force-with-lease<CR>", { desc = "Git Push --force-with-lease" })
 map("v", "<Leader>gb", ":GBrowse<CR>", { desc = "Git Browse" })
 
 -- easy navigation between window splits and tmux panes
