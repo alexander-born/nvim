@@ -1,23 +1,5 @@
 local M = {}
 
-local function split_by_space(input)
-  local chunks = {}
-  for substring in input:gmatch("%S+") do
-    table.insert(chunks, substring)
-  end
-  return chunks
-end
-
-function M.set_python_args(args)
-  vim.g.debug_args = split_by_space(args)
-  require("dap").configurations.python[1].args = vim.g.debug_args
-end
-
-function M.set_python_args_from_input()
-  local args = vim.fn.input("python args for debugging: ")
-  M.set_python_args(args)
-end
-
 function M.end_debug_session()
   require("dap").terminate()
   require("dapui").close()

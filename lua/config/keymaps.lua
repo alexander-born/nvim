@@ -40,6 +40,7 @@ map("n", "<Leader>bt", function() bazel.run_here("test", vim.g.bazel_config) end
 map("n", "<Leader>bb", function() bazel.run_here("build", vim.g.bazel_config) end, { desc = "Bazel Build" })
 map("n", "<Leader>br", function() bazel.run_here("run", vim.g.bazel_config) end, { desc = "Bazel Run" })
 map("n", "<Leader>bdb", function() bazel.run_here("build", vim.g.bazel_config .. " --compilation_mode dbg --copt=-O0") end, { desc = "Bazel Debug Build" })
+map("n", "<Leader>bda", my_bazel.set_debug_args_from_input, { desc = "Set Bazel Debug Arguments" })
 
 -- multi cursor <M-...> = <Alt-...>
 map("n", "<M-j>", "<Plug>(VM-Add-Cursor-Down)", { desc = "Multi Cursor Down" })
@@ -106,7 +107,6 @@ map("n", "<leader>l", dap.step_into, { desc = "Step Into (debugger)" })
 map("n", "<leader>j", dap.step_over, { desc = "Step Over (debugger)" })
 map("n", "<leader>k", dap.step_out, { desc = "Step Out (debugger)" })
 map("n", "<leader>dr", dap.run_to_cursor, { desc = "Run to Cursor" })
-map("n", "<leader>dap", mydap.set_python_args_from_input, { desc = "Set Python Arguments" })
 map("n", "<leader>dp", require("dap-python").test_method, { desc = "Debug python test_method" })
 map("n", "<leader>df", dap_telescope.frames, { desc = "Frames" })
 map("n", "<leader>dl", dap.run_last, { desc = "Debug Last" })

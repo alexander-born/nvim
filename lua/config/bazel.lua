@@ -187,4 +187,17 @@ function M.DebugRun()
   end
 end
 
+local function split_by_space(input)
+  local chunks = {}
+  for substring in input:gmatch("%S+") do
+    table.insert(chunks, substring)
+  end
+  return chunks
+end
+
+function M.set_debug_args_from_input()
+  local args = vim.fn.input("args for debugging with bazel: ")
+  vim.g.debug_args = split_by_space(args)
+end
+
 return M
