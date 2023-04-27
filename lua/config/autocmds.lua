@@ -35,6 +35,7 @@ vim.cmd(
 )
 
 function UpdateConfig()
+  vim.cmd("!git -C ~/.config/nvim checkout lazy-lock.json")
   vim.cmd("!git -C ~/.config/nvim pull")
   vim.cmd("!git -C ~/.config/nvim/lua/work pull")
   vim.cmd("Lazy restore")
