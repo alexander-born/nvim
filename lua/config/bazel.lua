@@ -29,7 +29,7 @@ local function StartDebugger(type, program, args, cwd, env, workspace)
     runInTerminal = false,
     stopOnEntry = false,
     setupCommands = { { text = "-enable-pretty-printing", ignoreFailures = true } },
-    sourceFileMap = { ["/proc/self/cwd"] = workspace },
+    -- sourceFileMap = { ["/proc/self/cwd"] = workspace },
   })
 end
 
