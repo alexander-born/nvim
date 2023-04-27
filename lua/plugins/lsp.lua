@@ -53,7 +53,7 @@ return {
         clangd = function(_, opts)
           opts.capabilities.documentFormattingProvider = false
           opts.capabilities.offsetEncoding = { "utf-16" }
-          opts.cmd = { "clangd", "--background-index", "--header-insertion=never" }
+          opts.cmd = { "clangd", "--background-index", "--header-insertion=never", "--query-driver=**" }
           opts.root_dir = bazel_root_dir(require("lspconfig.server_configurations.clangd").default_config.root_dir)
         end,
         pyright = function(_, opts)
