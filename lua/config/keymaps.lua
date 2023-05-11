@@ -152,34 +152,7 @@ map("n", "<leader>tdf", function() neotest.run.run({ vim.fn.expand("%"), strateg
 -- wiki
 map("n", "<leader>ww", ":VimwikiIndex<CR>", { desc = "Open Wiki Index" })
 
-vim.cmd[[
-function! AdaptFilePath(filepath, pattern, replacement)
-    let index = strridx(a:filepath, a:pattern) 
-    if (index != -1)
-        return a:filepath[0:index] . a:replacement
-    endif
-    return a:filepath
-endfunction
-
-function! SwitchSourceHeader()
-    let filepath = expand('%:p:h')
-    let filename = expand("%:t:r")
-    let fileending = expand("%:e")
-    if (fileending == "cpp")
-        let filetype = ".h"
-        let filepath = AdaptFilePath(filepath, "/src", "includes/**")
-        let filepath = AdaptFilePath(filepath, "/Sources", "Includes/**")
-    endif
-    if (fileending == "h")
-        let filetype = ".cpp"
-        let filepath = AdaptFilePath(filepath, "/includes", "src/**")
-        let filepath = AdaptFilePath(filepath, "/Includes", "Sources/**")
-    endif
-    exe "find " . filepath . "/" . filename . filetype
-endfunction
-]]
-
 -- switch between cpp and header file
-map('n', '<F7>', vim.fn.SwitchSourceHeader, {desc = "Switch Source/Header"})
+map('n', '<F7>', ":ClangdSwitchSourceHeader<CR>", {desc = "Switch Source/Header"})
 
 -- stylua: ignore end
