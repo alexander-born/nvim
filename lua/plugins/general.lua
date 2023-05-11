@@ -2,6 +2,7 @@
 return {
   { "folke/lazy.nvim", opts = { checker = { notify = false } } },
   { "tpope/vim-abolish" },
+  { "L3MON4D3/LuaSnip" },
   { "machakann/vim-sandwich" },
   { "mg979/vim-visual-multi" },
   { "davidgranstrom/nvim-markdown-preview" },
