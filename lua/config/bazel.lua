@@ -54,7 +54,7 @@ end
 
 local function get_bazel_python_modules(bazel_info)
   local imports = Split(get_python_imports(bazel_info), ":")
-  local extra_paths = { bazel_info.runfiles .. "/" .. bazel_info.workspace_name }
+  local extra_paths = { bazel_info.runfiles, bazel_info.runfiles .. "/" .. bazel_info.workspace_name }
   for _, import in pairs(imports) do
     table.insert(extra_paths, bazel_info.runfiles .. "/" .. import)
   end
