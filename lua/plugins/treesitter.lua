@@ -1,6 +1,7 @@
 return {
   "nvim-treesitter/nvim-treesitter",
   opts = function(_, opts)
+    require("nvim-treesitter.install").prefer_git = true
     table.insert(opts.ensure_installed, "cpp")
     opts.textobjects = {
       swap = {
