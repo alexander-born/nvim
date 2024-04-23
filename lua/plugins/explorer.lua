@@ -1,6 +1,15 @@
 return {
   {
     "nvim-neo-tree/neo-tree.nvim",
+    keys = {
+      {
+        "<leader>fE",
+        function()
+          require("neo-tree.command").execute({ toggle = true, reveal_force_cwd = true })
+        end,
+        desc = "Explorer NeoTree Force Cwd",
+      },
+    },
     opts = {
       filesystem = {
         window = {
