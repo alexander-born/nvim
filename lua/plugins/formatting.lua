@@ -8,6 +8,7 @@ return {
         python = { "black" },
         bzl = { "buildifier" },
         sh = { "shfmt" },
+        json = { "prettierd" },
       }
     end,
   },
@@ -19,6 +20,7 @@ return {
       table.insert(opts.ensure_installed, "clangd")
       table.insert(opts.ensure_installed, "black")
       table.insert(opts.ensure_installed, "clang-format")
+      table.insert(opts.ensure_installed, "prettierd")
     end,
   },
 }
