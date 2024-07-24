@@ -123,6 +123,18 @@ function M.create_pyright_config(target, include)
   )
 end
 
+function M.DebugBazelPyInput()
+  local args = ""
+  local command = vim.fn.input("add bazel debug without 'bazel run': ")
+  local split_command = vim.split(command, "--")
+
+  local start_debugger = function(bazel_info)
+    local cwd = bazel_info.runfiles .. "/" .. bazel_info.workspace_name
+    StartDebugger(type, get_program(bazel_info), args, cwd, get_env(bazel_info), bazel_info.workspace)
+  end
+  bazel.run("build", args, split_command[1], bazel.get_workspace(), { on_success = start_debugger })
+end
+
 function M.DebugBazel(type, bazel_config, get_program, args, get_env)
   local start_debugger = function(bazel_info)
     local cwd = bazel_info.runfiles .. "/" .. bazel_info.workspace_name
@@ -136,6 +148,8 @@ function M.DebugBazelPy(args)
     return {
       PYTHONPATH = get_python_path(bazel_info),
       RUNFILES_DIR = bazel_info.runfiles,
+      LD_LIBRARY_PATH = "/home/q456457/.local/lib/python3.8/site-packages/tensorrt_libs",
+      ASSET_PATH = "/data/training/modelstore",
     }
   end
   M.DebugBazel("python", vim.g.bazel_config, get_python_executable, args, get_env)

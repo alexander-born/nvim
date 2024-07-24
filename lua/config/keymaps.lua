@@ -50,31 +50,6 @@ map("n", "<M-k>", "<Plug>(VM-Add-Cursor-Up)", { desc = "Multi Cursor Up" })
 -- telescope
 local telescope = require("telescope")
 local builtin = require("telescope.builtin")
-
-local function on_project_selected(prompt_bufnr)
-  local project_actions = require( "telescope._extensions.project.actions")
-  local user_actions_available, user_project_actions = pcall(require, "user.project.actions")
-  local work_actions_available, work_project_actions = pcall(require, "work.project.actions")
-  project_actions.change_working_directory(prompt_bufnr, false)
-  vim.g.project_path = vim.fn.getcwd()
-  if user_actions_available then
-    user_project_actions(prompt_bufnr)
-  end
-  if work_actions_available then
-    work_project_actions(prompt_bufnr)
-  end
-end
-
-local function find_project()
-  telescope.extensions.project.project({
-    display_type = "full",
-    attach_mappings = function(prompt_bufnr, map_func)
-      map_func({ "n", "i" }, "<CR>", on_project_selected)
-      return true
-    end,
-  })
-end
-
 map("n", "<leader>ff", function() builtin.find_files({ previewer = false }) end, { desc = "Find Files" })
 map("n", "<leader>fs", function() builtin.find_files({ previewer = false, search_file = vim.fn.expand("<cword>") }) end, { desc = "Find Files String (Current Word under Cursor)" })
 map("n", "<leader>fo", function() builtin.oldfiles({ previewer = false }) end, { desc = "Find Oldfiles" })
@@ -87,10 +62,8 @@ map("n", "<leader>fr", builtin.registers, { desc = "Find Registers" })
 map("n", "<leader>fl", builtin.resume, { desc = "Find Last" })
 map("n", "<leader>ht", builtin.help_tags, { desc = "Find Help Tags" })
 map("n", "<leader>gr", builtin.live_grep, { desc = "Grep" })
-map("n", "<leader>grs", builtin.grep_string, { desc = "Grep String (Current Word under Cursor)" })
-map("n", "<leader>grb", builtin.current_buffer_fuzzy_find, { desc = "Fuzzy Find Buffer" })
 map("n", "<leader>fy", telescope.extensions.neoclip.default, { desc = "Find Yanks" })
-map("n", "<leader>fp", find_project, { desc = "Find Project" })
+map("n", "<leader>fp", telescope.extensions.project.project, { desc = "Find Project" })
 map("n", "<leader>f/", function() builtin.find_files({ prompt_title = ".cfg", cwd = "$HOME/.cfg", hidden = true, file_ignore_patterns = { ".git" } }) end, { desc = "Find .cfg" })
 map("n", "<leader>fn", function() builtin.find_files({ prompt_title = ".config/nvim", path_display = { "smart" }, search_dirs = { "$HOME/.config/nvim", "$HOME/.local/share/nvim/lazy" }, }) end, { desc = "Find Neovim Files" })
 map("n", "<leader>gr.", function() builtin.live_grep({ cwd = "$HOME/.cfg", vimgrep_arguments = { "rg", "--color=never", "--no-heading", "--with-filename", "--line-number", "--column", "--smart-case", "--hidden", }, file_ignore_patterns = { ".git" }, }) end, { desc = "Grep .cfg" })

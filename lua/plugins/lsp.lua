@@ -8,7 +8,6 @@ local function bazel_root_dir(default_root_dir)
     elseif bazel.is_bazel_workspace(fname) then
       return bazel.get_workspace(fname)
     end
-
     return default_root_dir(fname)
   end
 end
@@ -40,28 +39,40 @@ return {
     dependencies = { "alexander-born/bazel.nvim" },
     ---@class PluginLspOpts
     opts = {
+      format = {
+        timeout_ms = 2000,
+      },
       ---@type lspconfig.options
       servers = {
         -- will be automatically installed with mason and loaded with lspconfig
         clangd = {},
         pyright = {},
+        starlark_rust = { mason = false },
       },
       -- you can do any additional lsp server setup here
       -- return true if you don't want this server to be setup with lspconfig
       ---@type table<string, fun(server:string, opts:_.lspconfig.options):boolean?>
       setup = {
+        starlark_rust = function(_, opts)
+          opts.cmd = { "bazel-lsp" }
+          opts.root_dir =
+            bazel_root_dir(require("lspconfig.server_configurations.starlark_rust").default_config.root_dir)
+        end,
         clangd = function(_, opts)
+          opts.on_init = function(client)
+            client.config.cmd = {
+              "clangd",
+              "--background-index",
+              "--header-insertion=never",
+              -- "--clang-tidy",
+              -- "--clang-tidy-checks=*",
+              "--query-driver=**",
+              "--compile-commands-dir=" .. opts.root_dir(vim.api.nvim_buf_get_name(0)),
+            }
+            vim.print(client)
+          end
           opts.capabilities.documentFormattingProvider = false
           opts.capabilities.offsetEncoding = { "utf-16" }
-          opts.cmd = {
-            "clangd",
-            "--background-index",
-            "--header-insertion=never",
-            -- "--clang-tidy",
-            -- "--clang-tidy-checks=*",
-            "--query-driver=**",
-            "--compile-commands-dir=" .. vim.g.project_path or vim.fn.getcwd(),
-          }
           opts.root_dir = bazel_root_dir(require("lspconfig.server_configurations.clangd").default_config.root_dir)
         end,
         pyright = function(_, opts)
