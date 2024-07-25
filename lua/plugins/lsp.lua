@@ -69,7 +69,6 @@ return {
               "--query-driver=**",
               "--compile-commands-dir=" .. opts.root_dir(vim.api.nvim_buf_get_name(0)),
             }
-            vim.print(client)
           end
           opts.capabilities.documentFormattingProvider = false
           opts.capabilities.offsetEncoding = { "utf-16" }
