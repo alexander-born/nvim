@@ -59,20 +59,18 @@ return {
             bazel_root_dir(require("lspconfig.server_configurations.starlark_rust").default_config.root_dir)
         end,
         clangd = function(_, opts)
-          opts.on_init = function(client)
-            client.config.cmd = {
-              "clangd",
-              "--background-index",
-              "--header-insertion=never",
-              -- "--clang-tidy",
-              -- "--clang-tidy-checks=*",
-              "--query-driver=**",
-              "--compile-commands-dir=" .. opts.root_dir(vim.api.nvim_buf_get_name(0)),
-            }
-          end
           opts.capabilities.documentFormattingProvider = false
           opts.capabilities.offsetEncoding = { "utf-16" }
           opts.root_dir = bazel_root_dir(require("lspconfig.server_configurations.clangd").default_config.root_dir)
+          opts.on_new_config = function(new_config, new_root_dir)
+            new_config.cmd = {
+              "clangd",
+              "--background-index",
+              "--header-insertion=never",
+              "--query-driver=**",
+              "--compile-commands-dir=" .. new_root_dir,
+            }
+          end
         end,
         pyright = function(_, opts)
           opts.on_init = function(client)
