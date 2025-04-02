@@ -56,12 +56,12 @@ return {
         starlark_rust = function(_, opts)
           opts.cmd = { "bazel-lsp" }
           opts.root_dir =
-            bazel_root_dir(require("lspconfig.server_configurations.starlark_rust").default_config.root_dir)
+            bazel_root_dir(require("lspconfig.configs.starlark_rust").default_config.root_dir)
         end,
         clangd = function(_, opts)
           opts.capabilities.documentFormattingProvider = false
           opts.capabilities.offsetEncoding = { "utf-16" }
-          opts.root_dir = bazel_root_dir(require("lspconfig.server_configurations.clangd").default_config.root_dir)
+          opts.root_dir = bazel_root_dir(require("lspconfig.configs.clangd").default_config.root_dir)
           opts.on_new_config = function(new_config, new_root_dir)
             new_config.cmd = {
               "clangd",
@@ -76,7 +76,7 @@ return {
           opts.on_init = function(client)
             client.config.settings.python.pythonPath = get_python_path(client.config.root_dir)
           end
-          opts.root_dir = bazel_root_dir(require("lspconfig.server_configurations.pyright").default_config.root_dir)
+          opts.root_dir = bazel_root_dir(require("lspconfig.configs.pyright").default_config.root_dir)
         end,
         -- Specify * to use this function as a fallback for any server
         -- ["*"] = function(server, opts) end,
