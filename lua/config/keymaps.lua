@@ -5,18 +5,19 @@
 local map = vim.keymap.set
 
 local wk = require("which-key")
-wk.register({
-    ["<leader>f"]  = { name = "+find"},
-    ["<leader>t"]  = { name = "+test"},
-    ["<leader>gr"] = { name = "+grep"},
-    ["<leader>b"]  = { name = "+bazel"},
-    ["<leader>bd"] = { name = "+debug"},
-    ["<leader>d"]  = { name = "+debug"},
-    ["<leader>w"]  = { name = "+wiki"},
-    ["<leader>x"]  = { name = "+trouble"},
-    ["<leader>g"]  = { name = "+git"},
-    ["<leader>s"]  = { name = "+search +swap (TS)"},
-})
+wk.add( {
+    { "<leader>b", group = "bazel" },
+    { "<leader>bd", group = "debug" },
+    { "<leader>d", group = "debug" },
+    { "<leader>f", group = "find" },
+    { "<leader>g", group = "git" },
+    { "<leader>gr", group = "grep" },
+    { "<leader>s", group = "search +swap (TS)" },
+    { "<leader>t", group = "test" },
+    { "<leader>w", group = "wiki" },
+    { "<leader>x", group = "trouble" },
+  }
+)
 
 local sub = require("substitute")
 map("n", "<leader>r", sub.operator, { desc = "Replace with Register" })

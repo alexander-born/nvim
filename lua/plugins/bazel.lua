@@ -1,11 +1,13 @@
 return {
   { "bazelbuild/vim-bazel", dependencies = { "google/vim-maktaba" } },
   {
-    "hrsh7th/nvim-cmp",
-    dependencies = { "alexander-born/cmp-bazel" },
-    opts = function(_, opts)
-      opts.sources = require("cmp").config.sources(vim.list_extend(opts.sources, { { name = "bazel" } }))
-    end,
+    "saghen/blink.cmp",
+    dependencies = { "saghen/blink.compat", { "alexander-born/cmp-bazel", dependencies = "hrsh7th/nvim-cmp" } },
+    opts = {
+      sources = {
+        compat = { "bazel" },
+      },
+    },
   },
   {
     "alexander-born/bazel.nvim",
@@ -13,6 +15,7 @@ return {
       -- Info: to make tab completion work copy '/etc/bash_completion.d/bazel-complete.bash' to '/etc/bash_completion.d/bazel'
 
       vim.g.bazel_config = vim.g.bazel_config or ""
+      vim.g.bazel_cmd = "bazel"
 
       vim.cmd([[
         set errorformat=ERROR:\ %f:%l:%c:%m

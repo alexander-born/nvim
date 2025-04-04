@@ -11,4 +11,5 @@ return {
   { "aserowy/tmux.nvim", config = function() return require("tmux").setup({ copy_sync = { enable = false } }) end, },
   { "numToStr/Comment.nvim", config = function() require("Comment").setup() end, },
   { "gbprod/substitute.nvim", config = function() require("substitute").setup() end },
+  { "snacks.nvim", opts = { notifier = { enabled = false }, }, },
 }
