@@ -1,37 +1,68 @@
 return {
   {
-    "nvim-neo-tree/neo-tree.nvim",
-    keys = {
-      {
-        "<leader>fE",
-        function()
-          require("neo-tree.command").execute({ toggle = true, reveal_force_cwd = true })
-        end,
-        desc = "Explorer NeoTree Force Cwd",
-      },
-    },
+    "folke/snacks.nvim",
+    ---@type snacks.Config
     opts = {
-      filesystem = {
-        window = {
-          mappings = {
-            ["o"] = "open",
-            ["<leader>f"] = "telescope_find",
-            ["<leader>s"] = "telescope_grep",
-            ["/"] = false,
+      picker = {
+        formatters = {
+          file = {
+            truncate = 9999,
           },
         },
-        commands = {
-          telescope_find = function(state)
-            local node = state.tree:get_node()
-            local path = node:get_id()
-            require("telescope.builtin").find_files({ search_dirs = { path } })
-          end,
-          telescope_grep = function(state)
-            local node = state.tree:get_node()
-            local path = node:get_id()
-            require("telescope.builtin").live_grep({ search_dirs = { path } })
+        layout = {
+          layout = {
+            width = 0.9,
+            height = 0.9,
+          },
+          preset = function()
+            return "vertical"
           end,
         },
+        sources = {
+          explorer = {
+            layout = {
+              layout = {
+                width = 0.2,
+              },
+            },
+            win = {
+              list = {
+                keys = {
+                  ["<leader>s"] = "picker_grep",
+                  ["<leader>f"] = "picker_files",
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+    keys = {
+      {
+        "<leader>fe",
+        function()
+          local function startsWith(path, prefix)
+            return path:sub(1, #prefix) == prefix
+          end
+          local root = LazyVim.root()
+          local parent_path_buffer = vim.fn.expand("%:p:h")
+          if not startsWith(parent_path_buffer, root) then
+            root = parent_path_buffer
+          end
+          Snacks.explorer({ cwd = root })
+        end,
+        desc = "Explorer Snacks (root dir)",
+      },
+      { "<leader>e", "<leader>fe", desc = "Explorer Snacks (root dir)", remap = true },
+      { "<leader>fo", "<leader>fr", desc = "Find Recent", remap = true },
+      { "<leader>fO", "<leader>fR", desc = "Find Recent - cwd", remap = true },
+      {
+        "<leader>ff",
+        function()
+          Snacks.picker.files()
+        end,
+        desc = "Find files",
+        remap = true,
       },
     },
   },

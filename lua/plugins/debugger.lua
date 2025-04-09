@@ -1,4 +1,3 @@
-local telescope = require("telescope")
 return {
   { "szw/vim-maximizer" },
   { "rcarriga/nvim-dap-ui" },
@@ -16,7 +15,9 @@ return {
   },
   {
     "nvim-telescope/telescope-dap.nvim",
+    dependencies = { "nvim-telescope/telescope.nvim" },
     config = function()
+      local telescope = require("telescope")
       telescope.load_extension("dap")
     end,
   },
