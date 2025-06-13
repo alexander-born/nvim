@@ -31,14 +31,14 @@ map("n", "<leader>sA", "<cmd>TSTextobjectSwapPrevious<CR>", { desc = "Swap Argum
 -- bazel
 local bazel = require("bazel")
 local my_bazel = require("config.bazel")
-vim.api.nvim_create_autocmd("FileType", { pattern = "bzl", callback = function() map("n", "gd", vim.fn.GoToBazelDefinition, { buffer = true, desc = "Goto Definition" }) end, })
+-- vim.api.nvim_create_autocmd("FileType", { pattern = "bzl", callback = function() map("n", "gd", vim.fn.GoToBazelDefinition, { buffer = true, desc = "Goto Definition" }) end, })
 vim.api.nvim_create_autocmd("FileType", { pattern = "bzl", callback = function() map("n", "<Leader>y", my_bazel.YankLabel, { desc = "Bazel Yank Label" }) end, })
 map("n", "gbt", vim.fn.GoToBazelTarget, { desc = "Goto Bazel Build File" })
 map("n", "<Leader>bl", bazel.run_last, { desc = "Bazel Last" })
 map("n", "<Leader>bdt", my_bazel.DebugTest, { desc = "Bazel Debug Test" })
 map("n", "<Leader>bdr", my_bazel.DebugRun, { desc = "Bazel Debug Run" })
-map("n", "<Leader>bt", function() bazel.run_here("test", vim.g.bazel_config) end, { desc = "Bazel Test" })
-map("n", "<Leader>bT", function() bazel.run_here("test", vim.g.bazel_config .. " --test_arg=" .. require("bazel.gtest").get_gtest_filter_args()[1]) end, { desc = "Bazel Single GTest" })
+map("n", "<Leader>bt", function() bazel.run_here("test", vim.g.bazel_config .. " --test_output=all") end, { desc = "Bazel Test" })
+map("n", "<Leader>bT", function() bazel.run_here("test", vim.g.bazel_config .. " --test_output=all --test_arg=" .. require("bazel.gtest").get_gtest_filter_args()[1]) end, { desc = "Bazel Single GTest" })
 map("n", "<Leader>bb", function() bazel.run_here("build", vim.g.bazel_config) end, { desc = "Bazel Build" })
 map("n", "<Leader>br", function() bazel.run_here("run", vim.g.bazel_config) end, { desc = "Bazel Run" })
 map("n", "<Leader>bdb", function() bazel.run_here("build", vim.g.bazel_config .. " --compilation_mode dbg --copt=-O0") end, { desc = "Bazel Debug Build" })
@@ -48,22 +48,9 @@ map("n", "<Leader>bda", my_bazel.set_debug_args_from_input, { desc = "Set Bazel 
 map("n", "<M-j>", "<Plug>(VM-Add-Cursor-Down)", { desc = "Multi Cursor Down" })
 map("n", "<M-k>", "<Plug>(VM-Add-Cursor-Up)", { desc = "Multi Cursor Up" })
 
--- telescope
-local telescope = require("telescope")
-local builtin = require("telescope.builtin")
--- map("n", "<leader>fs", function() builtin.find_files({ previewer = false, search_file = vim.fn.expand("<cword>") }) end, { desc = "Find Files String (Current Word under Cursor)" })
--- map("n", "<leader>fo", function() builtin.oldfiles({ previewer = false }) end, { desc = "Find Oldfiles" })
--- map("n", "<leader>f/", function() builtin.find_files({ prompt_title = ".cfg", cwd = "$HOME/.cfg", hidden = true, file_ignore_patterns = { ".git" } }) end, { desc = "Find .cfg" })
--- map("n", "<leader>fn", function() builtin.find_files({ prompt_title = ".config/nvim", path_display = { "smart" }, search_dirs = { "$HOME/.config/nvim", "$HOME/.local/share/nvim/lazy" }, }) end, { desc = "Find Neovim Files" })
--- map("n", "<leader>gr.", function() builtin.live_grep({ cwd = "$HOME/.cfg", vimgrep_arguments = { "rg", "--color=never", "--no-heading", "--with-filename", "--line-number", "--column", "--smart-case", "--hidden", }, file_ignore_patterns = { ".git" }, }) end, { desc = "Grep .cfg" })
--- map("n", "<leader>grw", function() builtin.live_grep({ cwd = "$HOME/projects/vimwiki" }) end, { desc = "Grep Wiki" })
--- map("n", "<leader>grn", function() builtin.live_grep({ search_dirs = { "$HOME/.config/nvim", "$HOME/.local/share/nvim/lazy" } }) end, { desc = "Grep Neovim Files" })
--- map("n", "<leader>f.", function() builtin.find_files({ prompt_title = ".cfg", cwd = "$HOME/.config/nvim", no_ignore=true, hidden = true, file_ignore_patterns = { ".git" }, }) end, { desc = "Find .cfg" })
-
 -- debugger
 local dap = require("dap")
 local mydap = require("config.dap")
-local dap_telescope = require("telescope").extensions.dap
 map("n", "<leader>m", ":MaximizerToggle!<CR>", { desc = "Maximize Window Toggle" })
 map("n", "<leader>db", dap.toggle_breakpoint, { desc = "Set Breakpoint" })
 map("n", "<leader>l", dap.step_into, { desc = "Step Into (debugger)" })
@@ -71,16 +58,12 @@ map("n", "<leader>j", dap.step_over, { desc = "Step Over (debugger)" })
 map("n", "<leader>k", dap.step_out, { desc = "Step Out (debugger)" })
 map("n", "<leader>dr", dap.run_to_cursor, { desc = "Run to Cursor" })
 map("n", "<leader>dp", require("dap-python").test_method, { desc = "Debug python test_method" })
-map("n", "<leader>df", dap_telescope.frames, { desc = "Frames" })
 map("n", "<leader>dl", dap.run_last, { desc = "Debug Last" })
-map("n", "<leader>dd", function() require("dap.ext.vscode").load_launchjs() dap_telescope.configurations() end, { desc = "Available Debug Configurations" })
 map("n", "<leader>de", mydap.end_debug_session, { desc = "End Debugger" })
 map("n", "<leader>dc", ":e .vscode/launch.json<CR>", { desc = "Edit Debug Configurations" })
 map("n", "<leader>d<space>", dap.continue, { desc = "Continue (debugger)" })
 
 -- git
-map("n", "<leader>gb", function() builtin.git_branches({ cwd = vim.fn.expand("%:p:h") }) end, { desc = "Git Branches" })
-map("n", "<leader>gc", function() builtin.git_bcommits({ cwd = vim.fn.expand("%:p:h") }) end, { desc = "Git Commits" })
 map("n", "<Leader>gl", ":G log -n 1000<CR>", { desc = "Git Log" })
 map("n", "<Leader>gd", ":GitDiff<CR>", { desc = "Git Diff" })
 map("n", "<Leader>gs", ":G<CR>", { desc = "Git Status" })
@@ -95,7 +78,6 @@ map("n", "<C-K>", tmux.move_top, { desc = "Window <up>" })
 map("n", "<C-L>", tmux.move_right, { desc = "Window <right>" })
 map("n", "<C-H>", tmux.move_left, { desc = "Window <left>" })
 
-map("n", "<Leader>f", ':let @+=expand("%")<CR>', { desc = "Copy full path to clipboard" })
 map("v", "<C-c>", '"+y', { desc = "CTRL-c copies selection" })
 
 -- beginning/end of line

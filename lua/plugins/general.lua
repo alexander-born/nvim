@@ -7,21 +7,6 @@ return {
   { "LunarVim/bigfile.nvim" },
   { "davidgranstrom/nvim-markdown-preview" },
   {
-    "gbprod/yanky.nvim",
-    opts = {},
-    dependencies = { "folke/snacks.nvim" },
-    keys = {
-      {
-        "<leader>sy",
-        function()
-          Snacks.picker.yanky()
-        end,
-        mode = { "n", "x" },
-        desc = "Open Yank History",
-      },
-    },
-  },
-  {
     "vimwiki/vimwiki",
     init = function()
       vim.g.vimwiki_list = { { ext = ".md", path = "~/projects/vimwiki/", syntax = "markdown" } }
@@ -45,5 +30,5 @@ return {
       require("substitute").setup()
     end,
   },
-  { "snacks.nvim", opts = { notifier = { enabled = false } } },
+  { "snacks.nvim", opts = { notifier = { enabled = false }, scroll = { enabled = false } } },
 }

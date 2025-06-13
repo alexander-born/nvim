@@ -47,16 +47,15 @@ return {
         -- will be automatically installed with mason and loaded with lspconfig
         clangd = {},
         pyright = {},
-        starlark_rust = { mason = false },
+        starpls = {},
       },
       -- you can do any additional lsp server setup here
       -- return true if you don't want this server to be setup with lspconfig
       ---@type table<string, fun(server:string, opts:_.lspconfig.options):boolean?>
       setup = {
-        starlark_rust = function(_, opts)
-          opts.cmd = { "bazel-lsp" }
-          opts.root_dir =
-            bazel_root_dir(require("lspconfig.configs.starlark_rust").default_config.root_dir)
+        starpls = function(_, opts)
+          opts.cmd =
+            { "starpls", "server", "--experimental_enable_label_completions", "--experimental_infer_ctx_attributes" }
         end,
         clangd = function(_, opts)
           opts.capabilities.documentFormattingProvider = false

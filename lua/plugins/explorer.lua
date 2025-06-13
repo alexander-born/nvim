@@ -1,5 +1,13 @@
 return {
   {
+    "stevearc/oil.nvim",
+    ---@module 'oil'
+    ---@type oil.SetupOpts
+    opts = {},
+    dependencies = { { "echasnovski/mini.icons", opts = {} } },
+    lazy = false,
+  },
+  {
     "folke/snacks.nvim",
     ---@type snacks.Config
     opts = {
@@ -19,6 +27,11 @@ return {
           end,
         },
         sources = {
+          projects = {
+            dev = { "~", "~/workspace", "~/projects" },
+            recent = false,
+            patterns = { ".git", ".github", "WORKSPACE", ".gitignore", "README.md" },
+          },
           explorer = {
             layout = {
               layout = {
