@@ -15,8 +15,8 @@ local function Split(s, delimiter)
   return result
 end
 
-local function StartDebugger(type, program, args, cwd, env, workspace)
-  require("dap").run({
+local function StartDebugger(type, program, args, cwd, env, workspace, additional_config)
+  local config = {
     name = "Launch",
     type = type,
     request = "launch",
@@ -30,7 +30,8 @@ local function StartDebugger(type, program, args, cwd, env, workspace)
     stopOnEntry = false,
     setupCommands = { { text = "-enable-pretty-printing", ignoreFailures = true } },
     -- sourceFileMap = { ["/proc/self/cwd"] = workspace },
-  })
+  }
+  require("dap").run(vim.tbl_extend("force", config, additional_config))
 end
 
 function M.YankLabel()
@@ -43,6 +44,17 @@ end
 local function get_python_imports(bazel_info)
   local command = "grep 'python_imports =' " .. bazel_info.executable .. [[ | sed "s|.*'\(.*\)'|\1|"]]
   return vim.fn.trim(vim.fn.system(command))
+end
+
+local function get_python_binary(bazel_info)
+  local command = [[grep -oP "PYTHON_BINARY = '.*'" ]]
+    .. bazel_info.executable
+    .. [[ | grep -o "'.*'" | tail -c +2 | head -c -2]]
+  return bazel_info.runfiles .. "/" .. vim.fn.trim(vim.fn.system(command))
+end
+
+local function get_python_binary_config(bazel_info)
+  return { python = get_python_binary(bazel_info) }
 end
 
 local function get_python_executable(bazel_info)
@@ -135,10 +147,21 @@ function M.DebugBazelPyInput()
   bazel.run("build", args, split_command[1], bazel.get_workspace(), { on_success = start_debugger })
 end
 
-function M.DebugBazel(type, bazel_config, get_program, args, get_env)
+function M.DebugBazel(type, bazel_config, get_program, args, get_env, get_additional_config)
+  get_additional_config = get_additional_config or function(bazel_info)
+    return {}
+  end
   local start_debugger = function(bazel_info)
     local cwd = bazel_info.runfiles .. "/" .. bazel_info.workspace_name
-    StartDebugger(type, get_program(bazel_info), args, cwd, get_env(bazel_info), bazel_info.workspace)
+    StartDebugger(
+      type,
+      get_program(bazel_info),
+      args,
+      cwd,
+      get_env(bazel_info),
+      bazel_info.workspace,
+      get_additional_config(bazel_info)
+    )
   end
   bazel.run_here("build", bazel_config, { on_success = start_debugger })
 end
@@ -148,11 +171,11 @@ function M.DebugBazelPy(args)
     return {
       PYTHONPATH = get_python_path(bazel_info),
       RUNFILES_DIR = bazel_info.runfiles,
-      LD_LIBRARY_PATH = "/home/q456457/.local/lib/python3.8/site-packages/tensorrt_libs",
-      ASSET_PATH = "/data/training/modelstore",
+      -- LD_LIBRARY_PATH = "/home/q456457/.local/lib/python3.8/site-packages/tensorrt_libs",
+      -- ASSET_PATH = "/data/training/modelstore",
     }
   end
-  M.DebugBazel("python", vim.g.bazel_config, get_python_executable, args, get_env)
+  M.DebugBazel("python", vim.g.bazel_config, get_python_executable, args, get_env, get_python_binary_config)
 end
 
 function M.DebugBazelPyRun()
