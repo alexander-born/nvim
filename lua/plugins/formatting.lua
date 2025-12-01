@@ -13,7 +13,7 @@ return {
     end,
   },
   {
-    "williamboman/mason.nvim",
+    "mason-org/mason.nvim",
     opts = function(_, opts)
       table.insert(opts.ensure_installed, "stylua")
       table.insert(opts.ensure_installed, "buildifier")

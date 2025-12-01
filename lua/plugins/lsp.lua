@@ -58,8 +58,8 @@ return {
             { "starpls", "server", "--experimental_enable_label_completions", "--experimental_infer_ctx_attributes" }
         end,
         clangd = function(_, opts)
-          opts.capabilities.documentFormattingProvider = false
-          opts.capabilities.offsetEncoding = { "utf-16" }
+          -- opts.capabilities.documentFormattingProvider = false
+          -- opts.capabilities.offsetEncoding = { "utf-16" }
           opts.root_dir = bazel_root_dir(require("lspconfig.configs.clangd").default_config.root_dir)
           opts.on_new_config = function(new_config, new_root_dir)
             new_config.cmd = {
