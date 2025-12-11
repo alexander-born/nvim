@@ -97,6 +97,6 @@ map("n", "<leader>tdf", function() neotest.run.run({ vim.fn.expand("%"), strateg
 map("n", "<leader>ww", ":VimwikiIndex<CR>", { desc = "Open Wiki Index" })
 
 -- switch between cpp and header file
-map('n', '<F7>', ":ClangdSwitchSourceHeader<CR>", {desc = "Switch Source/Header"})
+map('n', '<F7>', ":LspClangdSwitchSourceHeader<CR>", {desc = "Switch Source/Header"})
 
 -- stylua: ignore end
